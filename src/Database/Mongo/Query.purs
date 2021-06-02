@@ -31,8 +31,9 @@ import Record.Builder (Builder)
 import Record.Builder as Builder
 import Simple.JSON (class WriteForeign, write)
 import Type.Prelude (class IsSymbol, RLProxy(..), SProxy(..))
-import Type.Row (Cons, Nil, kind RowList, class RowToList)
+--import Type.Row (kind RowList, class RowToList)
 import Type.Row as Row
+import Type.RowList -- (Cons, Nil, RowList, RowToList)
 import Unsafe.Coerce (unsafeCoerce)
 
 foreign import data Query :: Type -> Type
@@ -98,7 +99,7 @@ instance recordWriteQuery ::
       rlp = RLProxy :: RLProxy rl
       steps = writeQueryRecord rlp rec
 
-class IsQueryRecord (rl :: RowList) row (orig :: # Type) (from :: # Type) (to :: # Type)
+class IsQueryRecord rl row (orig :: # Type) (from :: # Type) (to :: # Type)
   | rl -> row from to orig where
   writeQueryRecord :: forall g. g rl -> Record row -> Builder (Record from) (Record to)
 
@@ -133,7 +134,9 @@ instance recordUnNest ::
   , UnNestFields rl out
   ) => UnNest (Record row) out
 
-class UnNestFields (rl :: RowList) row | rl -> row
+
+
+class UnNestFields rl row | rl -> row
 
 instance consUnNestFields ::
   ( Row.Cons name ty' whatever row
