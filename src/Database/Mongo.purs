@@ -4,6 +4,7 @@ module Database.Mongo
   , Collection
   , Cursor
   , connect
+  , client
   , defaultDb
   , db
   , close
@@ -22,7 +23,7 @@ import Prelude
 import Control.Bind (bindFlipped)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
-import Data.Function.Uncurried (Fn1, Fn2, Fn3, Fn5, Fn6, Fn7, Fn8, Fn9, runFn1, runFn2, runFn5, runFn6, runFn7, runFn8, runFn9)
+import Data.Function.Uncurried (Fn0, Fn1, Fn2, Fn3, Fn5, Fn6, Fn7, Fn8, Fn9, runFn0, runFn1, runFn2, runFn5, runFn6, runFn7, runFn8, runFn9)
 import Data.Nullable (null)
 import Database.Mongo.ApiCall (ApiCall)
 import Database.Mongo.ApiCall as ApiCall
@@ -45,6 +46,9 @@ foreign import data Cursor :: Type
 connect :: String -> Aff Client
 connect str = makeAff \cb ->
   runFn5 _connect str noopCancel cb Left Right
+
+client :: Client
+client = runFn0 _client
 
 -- | Get the default database
 defaultDb :: Client -> Database
@@ -178,6 +182,7 @@ foreign import _connect ::
       (Client -> Either Error Client)
       (Effect Canceler)
 
+foreign import _client :: Fn0 Client
 foreign import _defaultDb :: Fn1 Client Database
 foreign import _db :: Fn3 String Foreign Client Database
 foreign import __db :: Fn2 String Client Database

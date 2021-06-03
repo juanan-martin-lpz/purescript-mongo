@@ -1,9 +1,16 @@
 'use strict';
 
+let __client = require('mongodb').MongoClient;
+
+exports._client = function _client() {
+  return __client;
+}
+
+
 exports._connect = function _connect(uri, canceler, callback, left, right) {
-  var client = require('mongodb').MongoClient;
-  client.connect(uri, { useNewUrlParser: true }, function(err, x) {
-    
+  // var client = require('mongodb').MongoClient;
+  __client.connect(uri, { useNewUrlParser: true }, function(err, x) {
+
     if (err) {
       return callback(left(err))();
     }
